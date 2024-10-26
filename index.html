@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Auto-Calculated Fields</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f0f4f7;
+            color: #333;
+        }
+        .card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .btn-primary {
+            background-color: #2c82bb;
+            border-color: #2c82bb;
+        }
+        .btn-primary:hover {
+            background-color: #41b076;
+            border-color: #41b076;
+        }
+        .form-label {
+            color: #2c82bb;
+        }
+        .logo {
+            width: 150px;
+            animation: bounce 2s infinite;
+        }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-20px);
+            }
+            60% {
+                transform: translateY(-10px);
+            }
+        }
+        .info-icon {
+            margin-left: 5px;
+            color: #41b076;
+            cursor: pointer;
+        }
+        .info-box {
+            display: none; /* Hidden by default */
+            position: absolute;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            padding: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            width: 250px;
+            top: 100%; /* Position it right below the icon */
+            left: 0; /* Align with the left side of the icon */
+        }
+        .info-container {
+            position: relative; /* This will make the info box position relative to this container */
+            display: inline-block; /* Ensure that the icon and box stay close to each other */
+        }
+        input[readonly]:hover {
+            background-color: #d4edda; /* Light green background */
+            cursor: not-allowed; /* Change cursor to indicate it can't be edited */
+        }
+    </style>
+</head>
+<body>
+
+<div class="container mt-5">
+    <!-- Logo Section -->
+    <div class="text-center mb-4">
+        <img src="logo.jpg" alt="VLNs Logo" class="logo">
+    </div>
+
+    <div class="card p-4">
+        <h3 class="text-center mb-4">Dynamic Auto-Calculated Fields</h3>
+        <form id="calcForm">
+            <div class="row mb-3">
+
+                <div class="col-md-3">
+                    <label for="Discharge_time" class="form-label">Discharge time (s)
+                        <div class="info-container">
+                            <i class="fas fa-info-circle info-icon" data-bs-toggle="tooltip" title="Enter the first value here." calss="cycle1" onclick="toggleInfoBox(event,'infoBox',0)" ></i>
+                            <div id="infoBox" class="info-box">
+                                Discharge time refers to the duration it takes the mass to fall from its highest point to its lowest point in seconds.
+                            </div>
+                        </div>
+                    </label>
+                    <input type="number" min="0" class="form-control" id="Discharge_time" oninput="autoCalculate1()" placeholder="Enter value">
+                </div>
+
+                <div class="col-md-3">
+                    <label for="Power" class="form-label">Power (Watt)
+                        <div class="info-container">
+                            <i class="fas fa-info-circle info-icon" data-bs-toggle="tooltip" title="Enter the second value here." calss="cycle1" onclick="toggleInfoBox(event,'infoBox1',1)"></i>
+                            <div id="infoBox1" class="info-box">
+                                The electrical power produced by the system while the mass falling in watts.
+                            </div>
+                        </div>
+                    </label>
+                    <input type="number" min="0" step="0.001" class="form-control" id="Power" oninput="autoCalculate1()" placeholder="Enter value">
+                </div>
+
+                <div class="col-md-3">
+                    <label for="Energy" class="form-label">Energy (J)
+                        <div class="info-container">
+                            <i class="fas fa-info-circle info-icon" data-bs-toggle="tooltip" title="Enter the third value here." calss="cycle1" calss="cycle2" onclick="toggleInfoBox(event,'infoBox2',2)"></i>
+                            <div id="infoBox2" class="info-box">
+                                The total amount of energy that can be stored and utilized in Jouls.
+                            </div>
+                        </div>
+                    </label>
+                    <input type="number" min="0" step="0.001" class="form-control" id="Energy" oninput="autoCalculate12()" placeholder="Enter value">
+                </div>
+
+                <div class="col-md-3">
+                    <label for="Mass_height" class="form-label">Mass height (m)
+                        <div class="info-container">
+                            <i class="fas fa-info-circle info-icon" data-bs-toggle="tooltip" title="Enter the first value here." calss="cycle2" onclick="toggleInfoBox(event,'infoBox3',3)"></i>
+                            <div id="infoBox3" class="info-box">
+                                The maximum hight that the mass can reach in meters.
+                            </div>
+                        </div>
+                    </label>
+                    <input type="number" min="0" step="0.001" class="form-control" id="Mass_height" oninput="autoCalculate2()" placeholder="Enter value">
+                </div>
+
+                <div class="col-md-3">
+                    <label for="Mass_weight" class="form-label">Mass weight (Kg)
+                        <div class="info-container">
+                            <i class="fas fa-info-circle info-icon" data-bs-toggle="tooltip" title="This field will be auto-calculated based on other inputs." calss="cycle2" calss="cycle3" onclick="toggleInfoBox(event,'infoBox4',4)"></i>
+                            <div id="infoBox4" class="info-box">
+                                The weight of the mass suspended in kilograms.
+                            </div>
+                        </div>
+                    </label>
+                    <input type="number" min="0" step="1" class="form-control" id="Mass_weight" oninput="autoCalculate23()" placeholder="Enter value">
+                </div>
+                    
+                <div class="col-md-3">
+                    <label for="car_w" class="form-label">Average Car Weight (Kg)
+                        <div class="info-container">
+                            <i class="fas fa-info-circle info-icon" data-bs-toggle="tooltip" title="Enter the second value here." calss="cycle3" onclick="toggleInfoBox(event,'infoBox5',5)"></i>
+                            <div id="infoBox5" class="info-box">
+                                The average car weight driving on the road where the bumps are suposed to be in kilograms.
+                            </div>
+                        </div>
+                    </label>
+                    <input type="number" min="0" step="1" class="form-control" id="car_w" oninput="autoCalculate3()" placeholder="Enter value">
+                </div>
+
+                <div class="col-md-3">
+                    <label for="Torque" class="form-label">Torque amplification
+                        <div class="info-container">
+                            <i class="fas fa-info-circle info-icon" data-bs-toggle="tooltip" title="Enter the third value here." calss="cycle3" calss="cycle4" onclick="toggleInfoBox(event,'infoBox6',6)"></i>
+                            <div id="infoBox6" class="info-box">
+                                The total ratio of Torque amplification between the bump and the mass suspended.
+                            </div>
+                        </div>
+                    </label>
+                    <input type="number" min="1" class="form-control" id="Torque" oninput="autoCalculate34()" placeholder="Enter value">
+                </div>
+
+                <div class="col-md-3">
+                    <label for="Main_pulley" class="form-label">Main pulley raduise (m)
+                        <div class="info-container">
+                            <i class="fas fa-info-circle info-icon" data-bs-toggle="tooltip" title="This field will be auto-calculated based on other inputs." calss="cycle3" calss="cycle4" onclick="toggleInfoBox(event,'infoBox7',7)"></i>
+                            <div id="infoBox7" class="info-box">
+                                The raduise of the winch pulley in the system in meters.
+                            </div>
+                        </div>
+                    </label>
+                    <input type="number" min="0" step="0.001" class="form-control" id="Main_pulley" oninput="autoCalculate34()" placeholder="Enter value">
+                </div>
+                
+                
+                <div class="col-md-3">
+                    <label for="Press_distance" class="form-label">One Press distance (m)
+                        <div class="info-container">
+                            <i class="fas fa-info-circle info-icon" data-bs-toggle="tooltip" title="This field will be auto-calculated based on other inputs." calss="cycle4" onclick="toggleInfoBox(event,'infoBox8',8)"></i>
+                            <div id="infoBox8" class="info-box">
+                                The distance travelled by mass after one press on the bump in meters.
+                            </div>
+                        </div>
+                    </label>
+                    <input type="number" min="0" step="0.00001" class="form-control" id="Press_distance" oninput="autoCalculate4()" placeholder="Enter value">
+                </div>
+    
+            </div>
+            <div class="text-center">
+                <button type="button" class="btn btn-primary" onclick="clearFields()">Clear Fields</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Font Awesome JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
+
+<script>
+    let infoBoxVisible = [false,false,false,false,false,false,false,false,false];
+    let clickListener = [];
+
+    // Function to toggle the information box
+    function toggleInfoBox(event, s, count) {
+        event.stopPropagation(); // Stop event from bubbling up
+        const infoBox = document.getElementById(s);
+        
+        if (!infoBoxVisible[count]) {
+            // Show the info box
+            infoBox.style.display = 'block';
+
+           /* const iconPosition = event.target.getBoundingClientRect();
+            infoBox.style.top = (window.scrollY + iconPosition.bottom + 5) + 'px';  // 5px below the icon
+            infoBox.style.left = (iconPosition.left) + 'px';  // Align to the left of the icon*/
+
+            if (clickListener[count]) {
+                document.removeEventListener('click', clickListener[count]);
+            }
+
+            clickListener[count] = function(event) {
+                handleClickOutside(event, s, count);
+            };
+            // Set a short delay to prevent immediate closing due to event bubbling
+            setTimeout(() => {
+                document.addEventListener('click', clickListener[count]);
+            }, 10);
+
+            infoBoxVisible[count] = true;
+        } else {
+            hideInfoBox(s,count); // Hide if already visible
+        }
+    }
+
+    // Function to hide the information box
+    function hideInfoBox(s,count) {
+        const infoBox = document.getElementById(s);
+        infoBox.style.display = 'none';
+        infoBoxVisible[count] = false;
+
+        if (clickListener[count]) {
+            document.removeEventListener('click', clickListener[count]);
+            clickListener[count] = null; // Reset the listener
+        }// Remove the event listener
+    }
+
+    // Event listener to handle clicks outside of the info box
+    function handleClickOutside(event,s,count) {
+        const infoBox = document.getElementById(s);
+        if (infoBox && !infoBox.contains(event.target) && !event.target.matches('.info-icon')) {
+            hideInfoBox(s,count); // Hide the info box if clicked outside
+        }
+    }
+    // Activate Bootstrap tooltips
+    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+    const r_b = 0.2;
+    const e = 80/100;
+    const g= 9.81;
+    const t_b = 25;
+    const pi = 3.14159265359;
+
+    function autoCalculate12() {
+        autoCalculate1();
+        autoCalculate2();
+    }
+    function autoCalculate23() {
+        autoCalculate3();
+        autoCalculate2();
+    }
+    function autoCalculate34() {
+        autoCalculate3();
+        autoCalculate4();
+    }
+    function autoCalculate1() {
+        const Discharge_time = document.getElementById('Discharge_time').value;
+        const Power = document.getElementById('Power').value;
+        const Energy = document.getElementById('Energy').value;
+
+        const inputs = [Discharge_time, Power, Energy];
+        const filledInputs = inputs.filter(input => input !== '').length;
+
+        if (filledInputs === 2) {
+            // Convert to numbers for calculation
+            const Discharge_timen = parseFloat(Discharge_time) || 0;
+            const Powern = parseFloat(Power) || 0;
+            const Energyn = parseFloat(Energy) || 0;
+
+
+            if (Discharge_time === '') {
+                document.getElementById('Discharge_time').value = Energyn/Powern; // Example equation
+            } else if (Power === '') {
+                document.getElementById('Power').value = Energyn/Discharge_timen; // Example equation
+            } else if (Energy === '') {
+                document.getElementById('Energy').value = Powern*Discharge_timen; // Example equation
+                autoCalculate2();
+               // document.getElementById('input4').readOnly = true; 
+            }
+        }
+    }
+    function autoCalculate2() {
+        const Energy = document.getElementById('Energy').value;
+        const Mass_weight = document.getElementById('Mass_weight').value;
+        const Mass_height = document.getElementById('Mass_height').value;
+
+        const inputs = [Energy, Mass_weight, Mass_height];
+        const filledInputs = inputs.filter(input => input !== '').length;
+
+        if (filledInputs === 2) {
+            // Convert to numbers for calculation
+            const Energyn = parseFloat(Energy) || 0;
+            const Mass_weightn = parseFloat(Mass_weight) || 0;
+            const Mass_heightn = parseFloat(Mass_height) || 0;
+
+
+            if (Energy === '') {
+                document.getElementById('Energy').value =Mass_weightn*Mass_heightn*g*e ; // Example equation
+                autoCalculate1();
+            } else if (Mass_weight === '') {
+                document.getElementById('Mass_weight').value = Energyn/(Mass_heightn*g*e); // Example equation
+                autoCalculate3();
+            } else if (Mass_height === '') {
+                document.getElementById('Mass_height').value = Energyn/(Mass_weightn*g*e); // Example equation
+               // document.getElementById('input4').readOnly = true; 
+            }
+        }
+    }
+    function autoCalculate3() {
+        const Mass_weight = document.getElementById('Mass_weight').value;
+        const Torque = document.getElementById('Torque').value;
+        const car_w = document.getElementById('car_w').value;
+        const Main_pulley = document.getElementById('Main_pulley').value;
+        
+
+
+        const inputs = [Mass_weight, Torque, car_w, Main_pulley];
+        const filledInputs = inputs.filter(input => input !== '').length;
+
+        if (filledInputs === 3) {
+            // Convert to numbers for calculation
+            const Mass_weightn = parseFloat(Mass_weight) || 0;
+            const Torquen = parseFloat(Torque) || 0;
+            const car_wn = parseFloat(car_w) || 0;
+            const Main_pulleyn = parseFloat(Main_pulley) || 0;
+            if (Mass_weight === '') {
+                const car_wn1 = car_wn*(40/100);
+                document.getElementById('Mass_weight').value = car_wn1*Torquen*r_b/Main_pulleyn; // Example equation
+                autoCalculate2();
+            } else if (Torque === '') {
+                const car_wn1 = car_wn*(40/100);
+                document.getElementById('Torque').value = (Mass_weightn*Main_pulleyn)/(r_b*car_wn1); // Example equation
+                autoCalculate4();
+            } else if (car_w === '') {
+                document.getElementById('car_w').value = (Mass_weightn*Main_pulleyn)/(r_b*Torquen); // Example equation
+               // document.getElementById('input4').readOnly = true; 
+            }
+            else if(Main_pulley === ''){
+                const car_wn1 = car_wn*(40/100);
+                document.getElementById('Main_pulley').value = (Torquen*car_wn1*r_b)/Mass_weightn; // Example equation
+                autoCalculate4();
+            }
+
+    }
+}
+    function autoCalculate4() {
+        const Torque = document.getElementById('Torque').value;
+        const Main_pulley = document.getElementById('Main_pulley').value;
+        const Press_distance = document.getElementById('Press_distance').value;
+
+        const inputs = [Torque, Main_pulley, Press_distance];
+        const filledInputs = inputs.filter(input => input !== '').length;
+
+        if (filledInputs === 2) {
+            // Convert to numbers for calculation
+            const Torquen = parseFloat(Torque) || 0;
+            const Main_pulleyn = parseFloat(Main_pulley) || 0;
+            const Press_distancen = parseFloat(Press_distance) || 0;
+
+            if (Torque === '') {
+                document.getElementById('Torque').value = (2*pi*Main_pulleyn*t_b)/(360*Press_distancen); // Example equation
+                autoCalculate3();
+            } else if (Main_pulley === '') {
+                document.getElementById('Main_pulley').value = (Torquen*366*Press_distancen)/(2*pi*t_b); // Example equation
+                autoCalculate3();
+            } else if (Press_distance === '') {
+                document.getElementById('Press_distance').value = (2*pi*Main_pulleyn*t_b)/(360*Torquen); // Example equation
+               // document.getElementById('input4').readOnly = true; 
+            }
+        }
+    }
+
+    function clearFields() {
+        document.getElementById('calcForm').reset();
+    }
+</script>
+
+</body>
+</html>
