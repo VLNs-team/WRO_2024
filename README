@@ -1,3 +1,8 @@
 Hello world!
-We are VLNs team, this repository is for our participating in WRO 2024 in the future innovators senior category in Turkey, it contains all the coding scripts that were used in our robotic solution, 
-which are: an Arduino code fot the robotic solution, MATLAB simulink Diagrams for simulation, and the source code of the information interfcae were HTML, css, and javascript were used. 
+We are VLNs team, this repository is for our participating in WRO 2024 in the future innovators senior category in Turkey, it contains all the coding scripts that were used in our robotic solution, which are: an Arduino code for the robotic solution, MATLAB simulink Diagrams for simulation, and the source code of the information interfcae were HTML, css, and javascript were used. 
+in this repository, you will find the following codes:
+1- load_controlling.ino: the main arduino code that controls the load on the generator.
+2- stepper_toggle.ino: an arduino code to run the stepper motor using the TB6600 driver, this one is used to switch the connecting and disconnecting mechanism betweent the motor side gearbox and the chargeing phase gearbox.
+3- index.html: the html code for the user interface which call the script.js code and the style.css code and other bootstrap packages.
+4- style.css: the css code for the user interface.
+5- script.js: the javascript code for the user interface.
