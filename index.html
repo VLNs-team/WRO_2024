@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Dynamic Auto-Calculated Fields</title>
+        <!-- Bootstrap CSS -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+        <!-- Font Awesome CSS -->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
+        <link rel="stylesheet" href="style.css">
+
+    </head>
+    <body>
+        <div class="container mt-5">
+            <!-- Logo Section -->
+            <div class="text-center mb-4">
+                <img src="logo.jpg" alt="VLNs Logo" class="logo">
+            </div>
+
+            <div class="card p-4">
+                <h3 class="text-center mb-4">Dynamic Auto-Calculated Fields</h3>
+                <form id="calcForm">
+                    <div class="row mb-3">
+
+                        <div class="col-md-3">
+                            <label for="Discharge_time" class="form-label">Discharge time (s)
+                                <div class="info-container">
+                                    <i class="fas fa-info-circle info-icon" data-bs-toggle="tooltip" title="Enter the first value here." calss="cycle1" onclick="toggleInfoBox(event,'infoBox',0)" ></i>
+                                    <div id="infoBox" class="info-box">
+                                        Discharge time refers to the duration it takes the mass to fall from its highest point to its lowest point in seconds.
+                                    </div>
+                                </div>
+                            </label>
+                            <input type="number" min="0" class="form-control" id="Discharge_time" oninput="autoCalculate1()" placeholder="Enter value">
+                        </div>
+
+                        <div class="col-md-3">
+                            <label for="Power" class="form-label">Power (Watt)
+                                <div class="info-container">
+                                    <i class="fas fa-info-circle info-icon" data-bs-toggle="tooltip" title="Enter the second value here." calss="cycle1" onclick="toggleInfoBox(event,'infoBox1',1)"></i>
+                                    <div id="infoBox1" class="info-box">
+                                        The electrical power produced by the system while the mass falling in watts.
+                                    </div>
+                                </div>
+                            </label>
+                            <input type="number" min="0" step="0.001" class="form-control" id="Power" oninput="autoCalculate1()" placeholder="Enter value">
+                        </div>
+
+                        <div class="col-md-3">
+                            <label for="Energy" class="form-label">Energy (J)
+                                <div class="info-container">
+                                    <i class="fas fa-info-circle info-icon" data-bs-toggle="tooltip" title="Enter the third value here." calss="cycle1" calss="cycle2" onclick="toggleInfoBox(event,'infoBox2',2)"></i>
+                                    <div id="infoBox2" class="info-box">
+                                        The total amount of energy that can be stored and utilized in Jouls.
+                                    </div>
+                                </div>
+                            </label>
+                            <input type="number" min="0" step="0.001" class="form-control" id="Energy" oninput="autoCalculate12()" placeholder="Enter value">
+                        </div>
+
+                        <div class="col-md-3">
+                            <label for="Mass_height" class="form-label">Mass height (m)
+                                <div class="info-container">
+                                    <i class="fas fa-info-circle info-icon" data-bs-toggle="tooltip" title="Enter the first value here." calss="cycle2" onclick="toggleInfoBox(event,'infoBox3',3)"></i>
+                                    <div id="infoBox3" class="info-box">
+                                        The maximum hight that the mass can reach in meters.
+                                    </div>
+                                </div>
+                            </label>
+                            <input type="number" min="0" step="0.001" class="form-control" id="Mass_height" oninput="autoCalculate2()" placeholder="Enter value">
+                        </div>
+
+                        <div class="col-md-3">
+                            <label for="Mass_weight" class="form-label">Mass weight (Kg)
+                                <div class="info-container">
+                                    <i class="fas fa-info-circle info-icon" data-bs-toggle="tooltip" title="This field will be auto-calculated based on other inputs." calss="cycle2" calss="cycle3" onclick="toggleInfoBox(event,'infoBox4',4)"></i>
+                                    <div id="infoBox4" class="info-box">
+                                        The weight of the mass suspended in kilograms.
+                                    </div>
+                                </div>
+                            </label>
+                            <input type="number" min="0" step="1" class="form-control" id="Mass_weight" oninput="autoCalculate23()" placeholder="Enter value">
+                        </div>
+                            
+                        <div class="col-md-3">
+                            <label for="car_w" class="form-label">Average Car Weight (Kg)
+                                <div class="info-container">
+                                    <i class="fas fa-info-circle info-icon" data-bs-toggle="tooltip" title="Enter the second value here." calss="cycle3" onclick="toggleInfoBox(event,'infoBox5',5)"></i>
+                                    <div id="infoBox5" class="info-box">
+                                        The average car weight driving on the road where the bumps are suposed to be in kilograms.
+                                    </div>
+                                </div>
+                            </label>
+                            <input type="number" min="0" step="1" class="form-control" id="car_w" oninput="autoCalculate3()" placeholder="Enter value">
+                        </div>
+
+                        <div class="col-md-3">
+                            <label for="Torque" class="form-label">Torque amplification
+                                <div class="info-container">
+                                    <i class="fas fa-info-circle info-icon" data-bs-toggle="tooltip" title="Enter the third value here." calss="cycle3" calss="cycle4" onclick="toggleInfoBox(event,'infoBox6',6)"></i>
+                                    <div id="infoBox6" class="info-box">
+                                        The total ratio of Torque amplification between the bump and the mass suspended.
+                                    </div>
+                                </div>
+                            </label>
+                            <input type="number" min="1" class="form-control" id="Torque" oninput="autoCalculate34()" placeholder="Enter value">
+                        </div>
+
+                        <div class="col-md-3">
+                            <label for="Main_pulley" class="form-label">Main pulley raduise (m)
+                                <div class="info-container">
+                                    <i class="fas fa-info-circle info-icon" data-bs-toggle="tooltip" title="This field will be auto-calculated based on other inputs." calss="cycle3" calss="cycle4" onclick="toggleInfoBox(event,'infoBox7',7)"></i>
+                                    <div id="infoBox7" class="info-box">
+                                        The raduise of the winch pulley in the system in meters.
+                                    </div>
+                                </div>
+                            </label>
+                            <input type="number" min="0" step="0.001" class="form-control" id="Main_pulley" oninput="autoCalculate34()" placeholder="Enter value">
+                        </div>
+                        
+                        <div class="col-md-3">
+                            <label for="Press_distance" class="form-label">One Press distance (m)
+                                <div class="info-container">
+                                    <i class="fas fa-info-circle info-icon" data-bs-toggle="tooltip" title="This field will be auto-calculated based on other inputs." calss="cycle4" onclick="toggleInfoBox(event,'infoBox8',8)"></i>
+                                    <div id="infoBox8" class="info-box">
+                                        The distance travelled by mass after one press on the bump in meters.
+                                    </div>
+                                </div>
+                            </label>
+                            <input type="number" min="0" step="0.00001" class="form-control" id="Press_distance" oninput="autoCalculate4()" placeholder="Enter value">
+                        </div>
+
+                        <div class="col-md-3">
+                            <label for="cars_number" class="form-label">Cars needed to charge the system.
+                            </label>
+                            <input type="number" class="form-control" id="cars_number" readonly>
+                        </div>
+            
+                    </div>
+                    <div class="text-center">
+                        <button type="button" class="btn btn-primary" onclick="clearFields()">Clear Fields</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="container my-4" style="max-width: 800px;">
+            <div class="row g-4">
+                <div class="card p-4 h-100">
+                    <div class="mb-3">
+                        <h3 class="text-center text-primary">Pseudo Bump(s) Specifications</h3>
+                    </div>
+                    these are the default specifications of the pseudo bump, you can adjust them as needed and then get the results from the auto-calculated fields above.
+                    
+                    <div class="mb-3">
+                        <label for="bumps_number" class="form-label">Number of Bumps:</label>
+                        <input type="number" min="1" id="bumps_number" class="form-control" value="1" oninput="changebn()">
+                    </div>
+                    <div class="mb-3">
+                        <label for="bumps_angle" class="form-label">Angle of Bump (°):</label>
+                        <input type="number" min="1" id="bumps_angle" class="form-control" value="25" oninput="changea()">
+                    </div>
+                    <div class="mb-3">
+                        <label for="bumps_radius" class="form-label">Radius of Bump (cm):</label>
+                        <input type="number" min="1" id="bumps_radius" class="form-control" value="20" oninput="changer()">
+                    </div>
+                    <div class="text-center">
+                        <button type="button" class="btn btn-primary" onclick="resetValues()">Reset</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <!-- Bootstrap JS -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Font Awesome JS -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
+
+        <script src="script.js"></script>
+
+    </body>
+</html>
